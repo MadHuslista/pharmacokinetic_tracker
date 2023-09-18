@@ -72,6 +72,10 @@ def main():
     current_time_label = datetime.strftime(now, '%H:%M %d-%m-%y')
     ax.vlines(current_time, *ax.get_ylim(), color='red', linestyles='dashed', label=f'Current Time: \n{current_time_label}')
 
+    # Add effectiveness threshold 
+    threshold = 0.75
+    ax.hlines(threshold, *ax.get_xlim(), color='red', linestyles='dashed', label=f'Effectiveness Threshold: \n{threshold}')
+
     ax.set_xlabel('Hours', fontsize=18)
     ax.set_ylabel('Concentration', fontsize=18)
     ax.grid(linestyle='--')
