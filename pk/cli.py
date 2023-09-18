@@ -64,7 +64,7 @@ def main():
 
     ax.xaxis.set_major_locator(x_hourlocator)
     # ax.xaxis.set_minor_locator(x_hourlocator)
-    ax.xaxis.set_tick_params(rotation=-45)
+    ax.xaxis.set_tick_params(rotation=-90)
 
     # Addition of current time marker    
     now = datetime.now()
