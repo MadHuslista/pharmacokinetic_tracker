@@ -14,6 +14,15 @@ from graph import make_graph
 import matplotlib
 matplotlib.use('QtAgg')
 
+def simulation(args):
+    step = 1/60
+
+    drug = pk.Drug(args.hl, args.tmax)
+    num = round(args.duration / step + 1)
+    x = np.arange(num) * step
+    y = drug.concentration(num, step, dict(zip(args.offsets, args.doses)))
+
+    return x, y
 
 def main():
     """The main function."""
@@ -36,7 +45,9 @@ def main():
     ap.add_argument('--dpi', type=float, default=160, help='the output dots per inch (dpi)')
     args = ap.parse_args()
 
-    make_graph(args)
+
+    x, y = simulation(args)
+    make_graph(x, y, args)
 
     return 
 

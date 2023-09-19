@@ -8,8 +8,6 @@ import matplotlib.dates as mdates
 import numpy as np
 
 
-import pk 
-
 
 
 # Use Qt backend for matplotlib so that the window can be resized.
@@ -17,13 +15,7 @@ import matplotlib
 matplotlib.use('QtAgg')
 
 
-def make_graph(args):
-    step = 1/60
-
-    drug = pk.Drug(args.hl, args.tmax)
-    num = round(args.duration / step + 1)
-    x = np.arange(num) * step
-    y = drug.concentration(num, step, dict(zip(args.offsets, args.doses)))
+def make_graph(x, y, args):
 
     plt.rcParams['font.size'] = 12
 
