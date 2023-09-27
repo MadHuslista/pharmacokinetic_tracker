@@ -14,8 +14,10 @@ from graph import make_graph
 import matplotlib
 matplotlib.use('QtAgg')
 
-def simulation(args):
+def estimation(args):
     step = 1/60
+
+    # TODO: Check here how the arguments are used, to make the conversion to time
 
     drug = pk.Drug(args.hl, args.tmax)
     num = round(args.duration / step + 1)
@@ -46,7 +48,7 @@ def main():
     args = ap.parse_args()
 
 
-    x, y = simulation(args)
+    x, y = estimation(args)
     make_graph(x, y, args)
 
     return 
