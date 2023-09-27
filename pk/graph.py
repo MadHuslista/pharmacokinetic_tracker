@@ -50,6 +50,12 @@ def make_graph(x, y, args):
     threshold = 0.75
     ax.hlines(threshold, *ax.get_xlim(), color='red', linestyles='dashed', label=f'Effectiveness Threshold: \n{threshold}')
 
+    #Addition of current delay label 
+    delay = current_time - start_time
+    current_delay = delay.astype('timedelta64[s]')/np.timedelta64(3600, 's') 
+    current_delay_label = f"Current Delay: \n{current_delay:.2f} hours"
+    ax.scatter(current_time, 0, label=current_delay_label, s=0)
+
     ax.set_xlabel('Hours', fontsize=18)
     ax.set_ylabel('Concentration', fontsize=18)
     ax.grid(linestyle='--')
