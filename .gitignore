@@ -8,3 +8,4 @@ dist
 *.pid
 .env
 .vscode
+output.png
