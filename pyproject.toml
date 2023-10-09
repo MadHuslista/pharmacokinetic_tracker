@@ -1,0 +1,111 @@
+#-->> System <<--------------------------------------------
+[build-system]
+requires        = ["poetry-core"]
+build-backend   = "poetry.core.masonry.api"
+
+#-->> Metadata <<------------------------------------------
+[tool.poetry]
+name            = "pk_tracker"
+license         = "MIT"
+version         = "99.1"
+authors         = ["Nicolás Schiappacasse <nicolaschiappacasse@gmail.com>"]
+description     = "A CLI application to record, plot and plan a repeated dosage drug consumption over time."
+packages	  	= [
+#	{ include = "pk_engine" },
+#	{ include = "pk_db" },
+#    { include = "pk_visuals"}
+]
+
+#-->> Dependencies <<--------------------------------------
+[tool.poetry.dependencies]
+python = "~3.10"
+matplotlib = "^3.8.0"
+scipy = "^1.11.3"
+pyqt6 = "^6.5.2"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.9.1"
+ruff = "^0.0.292"
+
+
+
+#-->> Configurations <<--------------------------------------
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+line-length = 100
+select = [
+    "F",        # Pyflakes
+	"E",        #  pycodestyle
+	"C90",      #  mccabe
+	"I",        #  isort
+	"N",        # pep8-naming
+	"D",        # pydocstyle
+#	"UP",       # pyupgrade
+	"YTT",      # flake8-2020
+	"ANN",      # flake8-annotations
+	"ASYNC",    # flake8-async
+#	"S",        # flake8-bandit
+	"BLE",      # flake8-blind-except
+#	"FBT",      # flake8-boolean-trap
+	"B",        # flake8-bugbear
+#	"A",        # flake8-builtins
+	"COM",      # flake8-commas
+	"C4",       # flake8-comprehensions
+#	"DTZ",      # flake8-datetimez
+	"T10",      # flake8-debugger
+	"DJ",       # flake8-django
+	"EM",       # flake8-errmsg
+	"EXE",      # flake8-executable
+	"ISC",      # flake8-implicit-str-concat
+	"ICN",      # flake8-import-conventions
+	"G",        # flake8-logging-format
+	"INP",      # flake8-no-pep420
+	"PIE",      # flake8-pie
+	"T20",      # flake8-print
+	"PYI",      # flake8-pyi
+	"PT",       # flake8-pytest-style
+	"Q",        # flake8-quotes
+	"RSE",      # flake8-raise
+	"RET",      # flake8-return
+	"SLF",      # flake8-self
+	"SIM",      # flake8-simplify
+	"TID",      # flake8-tidy-imports
+	"TCH",      # flake8-type-checking
+	"INT",      # flake8-gettext
+	"ARG",      # flake8-unused-arguments
+#	"PTH",      # flake8-use-pathlib
+	"TD",       # flake8-todos
+	"FIX",      # flake8-fixme
+	"ERA",      # eradicate
+	"PD",       # pandas-vet
+	"PGH",      # pygrep-hooks
+	"PL",       # Pylint
+	"TRY",      # tryceratops
+	"FLY",      # flynt
+	"NPY",      # NumPy-specific rules
+	"AIR",      # Airflow
+	"RUF",      # Ruff-specific rules
+]
+ignore = [
+	# Always ignore these
+	"UP009", 
+	"INP001",
+	"EXE001",
+	"ANN401", # tp.Any
+	"ANN101", # Annotate Self 
+	"PLR0913", # Too many arguments
+
+	# Resolved by hand 
+	"I001", #(isort)
+
+	# Ignore these for now
+	"ERA001", # eradicate commented code
+	"T201", # flake8-print
+	"UP032", # pyupgrade (f-strings)
+	"S603", # bandit
+
+]
+# target-version = "py310"
