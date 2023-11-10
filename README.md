@@ -1,74 +1,51 @@
-pharmacokinetics
+pharmacokinetic_tracker 
 ================
 
-A Flask web application to calculate and plot drug concentration over time. A standalone CLI interface is also included.
+A CLI application to record, plot and plan a repeated dosage drug consumption over time. 
 
-Example output
---------------
 
-Here, `pk` computes the concentration of a drug with a terminal half-life (t<sub>½</sub>) of 6 hours and a time to maximum concentration (t<sub>max</sub>) of 2 hours. Doses of 10 mg each were given at t+0, t+4, and t+8 hours.
+References
+------------
 
-<img src="demo.svg" width="768" height="512">
+The PK engine used for the Pharmacokinetic calculations is directly taken from https://github.com/crowsonkb/pharmacokinetics
+
 
 Installation
 ------------
 
-First, clone this repository:
+0. Requirements:
+  
+  - Python 3.10
+  - [Poetry](https://python-poetry.org/docs/#installation)
+
+1. First, clone this repository and enter the directory:
 
 ```bash
-git clone https://github.com/crowsonkb/pharmacokinetics
-cd pharmacokinetics
+git clone https://github.com/MadHuslista/pharmacokinetic_tracker.git
+cd pharmacokinetic_tracker
 ```
 
-Create a new Python 3 virtual environment and activate it:
+2. Create the Python 3, Poetry virtual environment and activate it:
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
+poetry install 
 ```
 
-Install the package and its dependencies:
+3. [Optional] Add an alias to your shell configuration file (e.g. `~/.bashrc`):
 
 ```bash
-python3 setup.py install
+alias run_pk="bash ${REPO_PATH}/run_pk.sh"
 ```
 
-This also installs the `pk` command line interface.
-
-Run the web application:
+4. Call the alias to run the application:
 
 ```bash
-flask run
+run_pk
 ```
-
-This will start a development server on port 5000.
 
 CLI Usage
 ---------
 
 ```
-usage: pk [-h] --hl HOURS --tmax HOURS [--duration HOURS]
-          [--doses DOSE [DOSE ...]] [--offsets OFFSET [OFFSET ...]]
-          [--output FILE] [--output-size W H] [--dpi DPI]
 
-Calculates and plots drug concentration over time.
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --hl HOURS            the drug's elimination half-life, in hours (default:
-                        None)
-  --tmax HOURS          the drug's time to maximum concentration, in hours
-                        (default: None)
-  --duration HOURS      the duration, in hours, to simulate concentrations for
-                        (default: 24)
-  --doses DOSE [DOSE ...]
-                        the magnitudes of each dose (units are arbitrary)
-                        (default: [1])
-  --offsets OFFSET [OFFSET ...]
-                        the time, in hours, that each dose is given at
-                        (default: [0])
-  --output FILE         the output image filename (default: output.png)
-  --output-size W H     the output width and height in pixels (default: [1920,
-                        1280])
-  --dpi DPI             the output dots per inch (dpi) (default: 160)
 ```
