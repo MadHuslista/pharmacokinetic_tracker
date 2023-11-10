@@ -40,15 +40,15 @@ def make_graph(x, y, args):
     # ax.xaxis.set_minor_locator(x_hourlocator)
     ax.xaxis.set_tick_params(rotation=-90)
 
+    # Add effectiveness threshold 
+    threshold = 0.75
+    ax.hlines(threshold, *ax.get_xlim(), color='red', linestyles='dashed', label=f'Effectiveness Threshold: \n{threshold}')
+
     # Addition of current time marker    
     now = datetime.now()
     current_time = np.datetime64(now)
     current_time_label = datetime.strftime(now, '%H:%M %d-%m-%y')
     ax.vlines(current_time, *ax.get_ylim(), color='red', linestyles='dashed', label=f'Current Time: \n{current_time_label}')
-
-    # Add effectiveness threshold 
-    threshold = 0.75
-    ax.hlines(threshold, *ax.get_xlim(), color='red', linestyles='dashed', label=f'Effectiveness Threshold: \n{threshold}')
 
     #Addition of current delay label 
     delay = current_time - start_time
