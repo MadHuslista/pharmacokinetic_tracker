@@ -5,6 +5,7 @@ import typing as tp
 from datetime import datetime
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import mplcursors
 import numpy as np
 
 
@@ -13,6 +14,10 @@ import numpy as np
 # Use Qt backend for matplotlib so that the window can be resized.
 import matplotlib
 matplotlib.use('QtAgg')
+
+#Definitions
+START_TIME = np.datetime64('2023-09-13T13:50:00')
+
 
 
 def make_graph(x, y, args):
@@ -24,10 +29,9 @@ def make_graph(x, y, args):
     fig, ax = plt.subplots(figsize=(fig_width, fig_height), tight_layout=True)
 
     # Addition of start time to x axis
-    start_time = np.datetime64('2023-09-13T13:50:00')
     x_sec = x * 3600 
-    x_time = x_sec.astype('timedelta64[s]') + start_time
-    ax.plot(x_time, y)
+    x_time = x_sec.astype('timedelta64[s]') + START_TIME
+    drug_cp = ax.plot(x_time, y)
 
     # Addition of x axis time format
     x_formatter = mdates.DateFormatter('%H:%M %d-%m-%y')
@@ -51,8 +55,9 @@ def make_graph(x, y, args):
     ax.vlines(current_time, *ax.get_ylim(), color='red', linestyles='dashed', label=f'Current Time: \n{current_time_label}')
 
     #Addition of current delay label 
-    delay = current_time - start_time
-    current_delay = delay.astype('timedelta64[s]')/np.timedelta64(3600, 's') 
+    delay = current_time - START_TIME
+    # current_delay = delay.astype('timedelta64[s]')/np.timedelta64(3600, 's') 
+    current_delay = curr_time_to_delay(curr_time=current_time)
     current_delay_label = f"Current Delay: \n{current_delay:.2f} hours"
     ax.scatter(current_time, 0, label=current_delay_label, s=0)
 
@@ -64,6 +69,27 @@ def make_graph(x, y, args):
     # ax.xaxis.set_major_locator(plt.MaxNLocator(nbins='auto', integer=True, steps=hour_tick_steps))
     ax.margins(0.025, 0.05)
     ax.autoscale()
+
+    # Add Hover cursor
+    cursor = mplcursors.cursor(drug_cp)
+    cursor.connect(
+        "add", lambda sel: sel.annotation.set_text(
+            (f"Cp: {sel.target[1]:.2f}\n"
+             f"Del: {curr_time_to_delay(x_time[int(sel.index)]):.2f}\n"
+             f"Time: {x_time[int(sel.index)]}"
+            ),
+        ),
+    )
+
     fig.savefig(args.output, dpi=args.dpi)
     fig.show()
     input('Press enter to exit...')
+
+def curr_time_to_delay(
+    curr_time: datetime, 
+    start_time: datetime = START_TIME,
+    ) -> float:
+    """Converts current time to delay in hours"""
+    delay = curr_time - start_time
+    delay = delay.astype('timedelta64[s]')/np.timedelta64(3600, 's') 
+    return delay
