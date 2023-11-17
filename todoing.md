@@ -3,6 +3,7 @@
 
 # PRIORITY BECAUSE NEEDED
 - Add a second axis, so I have both, the time and the delay 
+- Add CLI info returned. 
 
 # Library
 - Create the independent libraries (branch feature/libraries): 
