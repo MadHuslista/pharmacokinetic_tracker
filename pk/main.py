@@ -36,9 +36,10 @@ def run_estimation(
     x_hours = np.arange(num) * step
     drug_cp = drug.concentration(num, step, dict(zip(offsets, doses)))
 
-    x_time = x_hours.astype("timedelta64[h]") + START_TIME
+    x_sec = x_hours * 3600
+    x_time = x_sec.astype("timedelta64[s]") + START_TIME
 
-    return x_hours, x_time, drug_cp
+    return x_sec, x_time, drug_cp
 
 # -->> API <<--------------------------
 
@@ -64,7 +65,7 @@ def main():
     args = ap.parse_args()
 
 
-    x_hours, x_time, drug_cp = run_estimation(
+    x_sec, x_time, drug_cp = run_estimation(
         half_life=args.hl,
         time_to_max=args.tmax,
         estimation_duration=args.duration,
