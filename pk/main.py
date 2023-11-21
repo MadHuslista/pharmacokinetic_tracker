@@ -16,6 +16,11 @@ from time_tools import START_TIME
 import matplotlib
 matplotlib.use('QtAgg')
 
+# -->> Tunables <<---------------------
+
+
+# -->> Definitions <<------------------
+
 def run_estimation(
     half_life: float,
     time_to_max: float,
@@ -34,6 +39,8 @@ def run_estimation(
     x_time = x_hours.astype("timedelta64[h]") + START_TIME
 
     return x_hours, x_time, drug_cp
+
+# -->> API <<--------------------------
 
 def main():
     """The main function."""
@@ -69,5 +76,13 @@ def main():
 
     input("Press enter to exit...")
 
+# -->> Execute <<----------------------
+
 if __name__ == '__main__':
     main()
+
+# -->> Export <<-----------------------
+
+__all__ = [
+    "main",
+]
