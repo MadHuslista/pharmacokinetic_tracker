@@ -67,5 +67,7 @@ def main():
 
     make_graph(x_time, drug_cp, args)
 
+    input("Press enter to exit...")
+
 if __name__ == '__main__':
     main()

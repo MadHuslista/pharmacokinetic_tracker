@@ -123,7 +123,7 @@ def make_graph(
 
     fig.savefig(args.output, dpi=args.dpi)
     fig.show()
-    input("Press enter to exit...")
+
 
 
 # -->> Execute <<----------------------
