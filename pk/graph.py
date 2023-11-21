@@ -10,10 +10,14 @@ import matplotlib.dates as mdates
 import mplcursors
 import numpy as np
 
+from time_tools import(
+    START_TIME,
+    curr_time_to_delay,
+)
+
 
 # Use Qt backend for matplotlib so that the window can be resized.
 import matplotlib
-
 matplotlib.use("QtAgg")
 
 
@@ -21,18 +25,6 @@ matplotlib.use("QtAgg")
 
 
 # -->> Definitions <<------------------
-
-START_TIME = np.datetime64("2023-09-13T13:50:00")
-
-
-def curr_time_to_delay(
-    curr_time: datetime,
-    start_time: datetime = START_TIME,
-) -> float:
-    """Convert current time to delay in hours."""
-    delay = curr_time - start_time
-    return delay.astype("timedelta64[s]") / np.timedelta64(3600, "s")
-
 
 def custom_annotation(
     sel: mplcursors.Selection,
