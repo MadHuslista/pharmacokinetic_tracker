@@ -8,8 +8,9 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import numpy as np
 
-import pk
 from graph import make_graph
+import pk
+from time_tools import START_TIME
 
 # Use Qt backend for matplotlib so that the window can be resized.
 import matplotlib
@@ -21,7 +22,7 @@ def run_estimation(
     estimation_duration: float,
     doses: list,
     offsets: list,
-) -> tp.Tuple[np.array, np.array]:
+) -> tp.Tuple[np.array, np.array, np.array]:
     """Wrapper to calculate drug concentration over time."""
     step = 1/60
 
@@ -30,7 +31,9 @@ def run_estimation(
     x_hours = np.arange(num) * step
     drug_cp = drug.concentration(num, step, dict(zip(offsets, doses)))
 
-    return x_hours, drug_cp
+    x_time = x_hours.astype("timedelta64[h]") + START_TIME
+
+    return x_hours, x_time, drug_cp
 
 def main():
     """The main function."""
@@ -54,14 +57,15 @@ def main():
     args = ap.parse_args()
 
 
-    x_hours, drug_cp = run_estimation(
+    x_hours, x_time, drug_cp = run_estimation(
         half_life=args.hl,
         time_to_max=args.tmax,
         estimation_duration=args.duration,
         doses=args.doses,
         offsets=args.offsets,
     )
-    make_graph(x_hours, drug_cp, args)
+
+    make_graph(x_time, drug_cp, args)
 
 if __name__ == '__main__':
     main()

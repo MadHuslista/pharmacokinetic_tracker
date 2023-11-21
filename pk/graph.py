@@ -55,8 +55,8 @@ def custom_annotation(
 
 
 def make_graph(
-    x: np.array,
-    y: np.array,
+    x_time: np.array,
+    drug_cp: np.array,
     args: argparse.Namespace,
 ) -> None:
     """Make graph of drug concentration over time."""
@@ -66,10 +66,7 @@ def make_graph(
     fig_height = args.output_size[1] / args.dpi
     fig, ax = plt.subplots(figsize=(fig_width, fig_height), tight_layout=True)
 
-    # Addition of start time to x axis and plot
-    x_sec = x * 3600
-    x_time = x_sec.astype("timedelta64[s]") + START_TIME
-    drug_cp = ax.plot(x_time, y)
+    drug_curve = ax.plot(x_time, drug_cp)
 
     # Addition of x axis time format
     x_formatter = mdates.DateFormatter("%H:%M %d-%m-%y")
@@ -118,7 +115,7 @@ def make_graph(
     ax.autoscale()
 
     # Add Hover cursor
-    cursor = mplcursors.cursor(drug_cp, hover=2)
+    cursor = mplcursors.cursor(drug_curve, hover=2)
     cursor.connect(
         "add",
         lambda sel: custom_annotation(sel, x_time=x_time),
