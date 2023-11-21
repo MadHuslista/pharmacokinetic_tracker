@@ -1,6 +1,7 @@
 """Calculates and plots drug concentration over time."""
 
 import argparse
+import typing as tp
 
 from datetime import datetime 
 import matplotlib.pyplot as plt
@@ -14,17 +15,22 @@ from graph import make_graph
 import matplotlib
 matplotlib.use('QtAgg')
 
-def estimation(args):
+def run_estimation(
+    half_life: float,
+    time_to_max: float,
+    estimation_duration: float,
+    doses: list,
+    offsets: list,
+) -> tp.Tuple[np.array, np.array]:
+    """Wrapper to calculate drug concentration over time."""
     step = 1/60
 
-    # TODO: Check here how the arguments are used, to make the conversion to time
+    drug = pk.Drug(half_life, time_to_max)
+    num = round(estimation_duration / step + 1)
+    x_hours = np.arange(num) * step
+    drug_cp = drug.concentration(num, step, dict(zip(offsets, doses)))
 
-    drug = pk.Drug(args.hl, args.tmax)
-    num = round(args.duration / step + 1)
-    x = np.arange(num) * step
-    y = drug.concentration(num, step, dict(zip(args.offsets, args.doses)))
-
-    return x, y
+    return x_hours, drug_cp
 
 def main():
     """The main function."""
@@ -48,11 +54,14 @@ def main():
     args = ap.parse_args()
 
 
-    x, y = estimation(args)
-    make_graph(x, y, args)
-
-    return 
-
+    x_hours, drug_cp = run_estimation(
+        half_life=args.hl,
+        time_to_max=args.tmax,
+        estimation_duration=args.duration,
+        doses=args.doses,
+        offsets=args.offsets,
+    )
+    make_graph(x_hours, drug_cp, args)
 
 if __name__ == '__main__':
     main()
