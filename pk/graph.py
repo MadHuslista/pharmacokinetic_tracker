@@ -43,10 +43,15 @@ def custom_annotation(
     time = x_time[int(sel.index)]
     delay = curr_time_to_delay(time)
 
+    time_label = time.astype(datetime)
+    day_label = datetime.strftime(time_label, "%d-%m-%y")
+    time_label = datetime.strftime(time_label, "%H:%M")
+
     message = (
-        f"Time   : {time}\n"
+        f"Day     : {day_label}\n"
+        f"Time    : {time_label}\n"
         f"Delay  : {delay:.2f}\n"
-        f"Cp       : {cp:.2f}\n"
+        f"Cp       : {cp:.2f}"
     )
 
     # 'ma' is the matplotlib attribute to set the text alignment in multiline
