@@ -2,7 +2,7 @@
 #! /bin/bash
 
 REPO_DIR="/home/zima/Documents/Outside_Life/Salud/TDAH/Simulation/flask_web/"
-CLI_EXE=$REPO_DIR/pk/cli.py
+CLI_EXE=$REPO_DIR/pk/main.py
 VENV_DIR=$REPO_DIR/.venv
 
 # LDX PK PARAMETERS
