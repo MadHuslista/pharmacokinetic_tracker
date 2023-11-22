@@ -22,15 +22,15 @@ from time_tools import (
 
 
 def print_table(
-        data: list,
+    data: list,
 ) -> None:
     """Print table."""
     table = tt.Texttable()
     table.add_rows(data, header=True)
-    print("\n\n")
+    print("\nDosage Info:")
     message = table.draw()
     print(message)
-    print("\n\n")
+
 
 # -->> API <<--------------------------
 
