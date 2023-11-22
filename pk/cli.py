@@ -80,10 +80,25 @@ def cli_message(
     current_cp_idx = np.abs(x_time - current_time_np64).argmin()
     current_cp = drug_cp[current_cp_idx]
 
-    # Next dosage time
-    last_dosage_idx = np.abs(x_time - last_dosage_time).argmin()
+    # Max CP since last dosage
     last_dosage_max_idx = drug_cp[last_dosage_idx:].argmax() + last_dosage_idx
+    last_dosage_max_cp = drug_cp[last_dosage_max_idx]
 
+    # Max CP time since last dosage
+    last_dosage_max_time = x_time[last_dosage_max_idx]
+    last_dosage_max_time_day_label = datetime.strftime(
+        last_dosage_max_time.astype(datetime),
+        "%d-%m-%y",
+    )
+    last_dosage_max_time_hour_label = datetime.strftime(
+        last_dosage_max_time.astype(datetime),
+        "%H:%M",
+    )
+
+    #Max CP delay since last dosage
+    last_dosage_max_delay = curr_time_to_delay(last_dosage_max_time)
+
+    # Next dosage time
     next_dosage_idx = (
         np.abs(drug_cp[last_dosage_max_idx:] - EFFICACY_THRESHOLD).argmin() + last_dosage_max_idx
     )
@@ -102,24 +117,24 @@ def cli_message(
     # Next dosage delay
     next_dosage_delay = curr_time_to_delay(next_dosage_time)
 
-    # Next dosage CP
-    next_dosage_cp = drug_cp[next_dosage_idx]
-
     # Print CLI message
     data = [
-        ["Last Dose", "Current Dose", "Next Threshold cross"],
+        ["Last Dose", "Max Dose", "Current Dose", "Next Threshold cross"],
         [
             f"Time:\n\t{last_dosage_time_day_label}\n\t{last_dosage_time_hour_label}",
+            f"Time:\n\t{last_dosage_max_time_day_label}\n\t{last_dosage_max_time_hour_label}",
             f"Time:\n\t{current_time_day_label}\n\t{current_time_hour_label}",
             f"Time:\n\t{next_dosage_time_day_label}\n\t{next_dosage_time_hour_label}",
         ],
         [
             f"Delay:\n\t{last_dosage_delay}",
+            f"Delay:\n\t{last_dosage_max_delay}",
             f"Delay:\n\t{curr_delay:.2F}",
             f"Delay:\n\t{next_dosage_delay:.2F}",
         ],
         [
             f"CP:\n\t{last_dosage_cp:.2F}",
+            f"CP:\n\t{last_dosage_max_cp:.2F}",
             f"CP:\n\t{current_cp:.2F}",
             "",
             # f"CP:\n\t{next_dosage_cp:.2F}",
