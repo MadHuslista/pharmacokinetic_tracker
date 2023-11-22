@@ -12,13 +12,14 @@ import numpy as np
 
 from config import EFFICACY_THRESHOLD
 
-from time_tools import(
+from time_tools import (
     curr_time_to_delay,
 )
 
 
 # Use Qt backend for matplotlib so that the window can be resized.
 import matplotlib
+
 matplotlib.use("QtAgg")
 
 
@@ -26,6 +27,7 @@ matplotlib.use("QtAgg")
 
 
 # -->> Definitions <<------------------
+
 
 def custom_annotation(
     sel: mplcursors.Selection,
@@ -61,6 +63,7 @@ def make_graph(
     args: argparse.Namespace,
 ) -> None:
     """Make graph of drug concentration over time."""
+    print("Making graph...")
     plt.rcParams["font.size"] = 12
 
     fig_width = args.output_size[0] / args.dpi
@@ -125,6 +128,7 @@ def make_graph(
     fig.savefig(args.output, dpi=args.dpi)
     fig.show()
 
+    input("Press enter to exit...")
 
 
 # -->> Execute <<----------------------

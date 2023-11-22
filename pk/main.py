@@ -3,9 +3,6 @@
 import argparse
 import typing as tp
 
-from datetime import datetime 
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 import numpy as np
 
 from cli import cli_message
@@ -64,6 +61,7 @@ def main():
     ap.add_argument('--output-size', type=int, nargs=2, default=[1920, 1280], metavar=('W', 'H'),
                     help='the output width and height in pixels')
     ap.add_argument('--dpi', type=float, default=160, help='the output dots per inch (dpi)')
+    ap.add_argument('--graph', action='store_true', help='show the graph')
     args = ap.parse_args()
 
 
@@ -81,9 +79,8 @@ def main():
         drug_cp=drug_cp,
     )
 
-    make_graph(x_time, drug_cp, args)
-
-    input("Press enter to exit...")
+    if args.graph:
+        make_graph(x_time, drug_cp, args)
 
 # -->> Execute <<----------------------
 
