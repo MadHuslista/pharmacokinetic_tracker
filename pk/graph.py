@@ -10,6 +10,12 @@ import matplotlib.dates as mdates
 import mplcursors
 import numpy as np
 
+from config import EFFICACY_THRESHOLD
+
+from time_tools import (
+    curr_time_to_delay,
+)
+
 
 # Use Qt backend for matplotlib so that the window can be resized.
 import matplotlib
@@ -21,17 +27,6 @@ matplotlib.use("QtAgg")
 
 
 # -->> Definitions <<------------------
-
-START_TIME = np.datetime64("2023-09-13T13:50:00")
-
-
-def curr_time_to_delay(
-    curr_time: datetime,
-    start_time: datetime = START_TIME,
-) -> float:
-    """Convert current time to delay in hours."""
-    delay = curr_time - start_time
-    return delay.astype("timedelta64[s]") / np.timedelta64(3600, "s")
 
 
 def custom_annotation(
@@ -63,21 +58,19 @@ def custom_annotation(
 
 
 def make_graph(
-    x: np.array,
-    y: np.array,
+    x_time: np.array,
+    drug_cp: np.array,
     args: argparse.Namespace,
 ) -> None:
     """Make graph of drug concentration over time."""
+    print("Making graph...")
     plt.rcParams["font.size"] = 12
 
     fig_width = args.output_size[0] / args.dpi
     fig_height = args.output_size[1] / args.dpi
     fig, ax = plt.subplots(figsize=(fig_width, fig_height), tight_layout=True)
 
-    # Addition of start time to x axis and plot
-    x_sec = x * 3600
-    x_time = x_sec.astype("timedelta64[s]") + START_TIME
-    drug_cp = ax.plot(x_time, y)
+    drug_curve = ax.plot(x_time, drug_cp)
 
     # Addition of x axis time format
     x_formatter = mdates.DateFormatter("%H:%M %d-%m-%y")
@@ -90,7 +83,7 @@ def make_graph(
     ax.xaxis.set_tick_params(rotation=-90)
 
     # Add effectiveness threshold
-    threshold = 0.75
+    threshold = EFFICACY_THRESHOLD
     ax.hlines(
         threshold,
         *ax.get_xlim(),
@@ -126,7 +119,7 @@ def make_graph(
     ax.autoscale()
 
     # Add Hover cursor
-    cursor = mplcursors.cursor(drug_cp, hover=2)
+    cursor = mplcursors.cursor(drug_curve, hover=2)
     cursor.connect(
         "add",
         lambda sel: custom_annotation(sel, x_time=x_time),
@@ -134,6 +127,7 @@ def make_graph(
 
     fig.savefig(args.output, dpi=args.dpi)
     fig.show()
+
     input("Press enter to exit...")
 
 

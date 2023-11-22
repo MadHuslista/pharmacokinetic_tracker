@@ -2,7 +2,7 @@
 #! /bin/bash
 
 REPO_DIR="/home/zima/Documents/Outside_Life/Salud/TDAH/Simulation/flask_web/"
-CLI_EXE=$REPO_DIR/pk/cli.py
+CLI_EXE=$REPO_DIR/pk/main.py
 VENV_DIR=$REPO_DIR/.venv
 
 # LDX PK PARAMETERS
@@ -18,7 +18,7 @@ EXE="python ${CLI_EXE} --hl ${HL} --tmax ${TMAX} --dose ${DOSE}  --offsets ${OFF
 run_exe(){
     echo "Running simulation.."
     # Run formatter  
-    $EXE
+    $EXE $1
 }
 
 # Check if the Python environment is activated
@@ -27,8 +27,14 @@ if [[ "$VIRTUAL_ENV" == "" ]]; then
         . $VENV_DIR/bin/activate
         echo "Activated virtual environment.."
         cd $REPO_DIR
-        run_exe
-
+        if [ "$1" == "-h" ]; then
+            python ${CLI_EXE} --help
+        
+        elif [ "$1" == "-g" ]; then
+            run_exe --graph
+        else
+            run_exe
+        fi
     else 
         echo "Virtual environment not found."
         exit 1
