@@ -8,9 +8,11 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import numpy as np
 
+from cli import cli_message
+from config import START_TIME
 from graph import make_graph
 import pk
-from time_tools import START_TIME
+
 
 # Use Qt backend for matplotlib so that the window can be resized.
 import matplotlib
@@ -71,6 +73,12 @@ def main():
         estimation_duration=args.duration,
         doses=args.doses,
         offsets=args.offsets,
+    )
+
+    cli_message(
+        offsets=args.offsets,
+        x_time=x_time,
+        drug_cp=drug_cp,
     )
 
     make_graph(x_time, drug_cp, args)

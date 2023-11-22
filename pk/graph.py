@@ -10,8 +10,9 @@ import matplotlib.dates as mdates
 import mplcursors
 import numpy as np
 
+from config import EFFICACY_THRESHOLD
+
 from time_tools import(
-    START_TIME,
     curr_time_to_delay,
 )
 
@@ -79,7 +80,7 @@ def make_graph(
     ax.xaxis.set_tick_params(rotation=-90)
 
     # Add effectiveness threshold
-    threshold = 0.75
+    threshold = EFFICACY_THRESHOLD
     ax.hlines(
         threshold,
         *ax.get_xlim(),
