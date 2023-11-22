@@ -107,7 +107,7 @@ def cli_message(
 
     # Print CLI message
     data = [
-        ["Last Dose", "Current Dose", "Next Dose"],
+        ["Last Dose", "Current Dose", "Next Threshold cross"],
         [
             f"Time:\n\t{last_dosage_time_day_label}\n\t{last_dosage_time_hour_label}",
             f"Time:\n\t{current_time_day_label}\n\t{current_time_hour_label}",
@@ -121,7 +121,8 @@ def cli_message(
         [
             f"CP:\n\t{last_dosage_cp:.2F}",
             f"CP:\n\t{current_cp:.2F}",
-            f"CP:\n\t{next_dosage_cp:.2F}",
+            "",
+            # f"CP:\n\t{next_dosage_cp:.2F}",
         ],
     ]
 
