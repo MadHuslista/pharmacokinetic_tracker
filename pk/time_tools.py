@@ -33,7 +33,7 @@ def detect_input_time_format(
         "%Y-%m-%d %H:%M": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}",  # Matches YYYY-MM-DD-HH:MM
         "%y-%m-%d %H:%M": r"\d{2}-\d{2}-\d{2} \d{2}:\d{2}", # Matches YY-MM-DD HH:MM
         "%m-%d-%H:%M": r"\d{2}-\d{2} \d{2}:\d{2}",          # Matches MM-DD-HH:MM
-        "%d-%H:%M": r"\d{2} \d{2}:\d{2}",                   # Matches DD-HH:MM
+        "%d %H:%M": r"\d{2} \d{2}:\d{2}",                   # Matches DD-HH:MM
         "%H:%M": r"\d{2}:\d{2}",                              # Matches HH:MM
     }
 
@@ -83,6 +83,9 @@ def parser(
 ) -> np.datetime64:
     
     current_datetime = datetime.now()
+
+    if type(input_time_str) == list:
+        input_time_str = " ".join(input_time_str)
 
     input_format = detect_input_time_format(input_time_str)
 

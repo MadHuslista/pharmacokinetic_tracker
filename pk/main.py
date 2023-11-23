@@ -64,7 +64,7 @@ def main():
     ap.add_argument('--dpi', type=float, default=160, help='the output dots per inch (dpi)')
     ap.add_argument('-g', '--graph', action='store_true', help='show the graph')
 
-    ap.add_argument('-p','--parsetime', type=str, help='parse a time string and exit. Accepted formats: YYYY-MM-DD HH:MM, YY-MM-DD HH:MM, MM-DD HH:MM, DD HH:MM, HH:MM')
+    ap.add_argument('-p','--parsetime', nargs='+', type=str, help='parse a time string and exit. Accepted formats: YYYY-MM-DD HH:MM, YY-MM-DD HH:MM, MM-DD HH:MM, DD HH:MM, HH:MM')
 
     args = ap.parse_args()
 
