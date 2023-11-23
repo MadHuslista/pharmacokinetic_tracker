@@ -18,7 +18,7 @@ EXE="python ${CLI_EXE} --hl ${HL} --tmax ${TMAX} --dose ${DOSE}  --offsets ${OFF
 run_exe(){
     echo "Running simulation.."
     # Run formatter  
-    $EXE $1
+    $EXE "$@"
 }
 
 # Check if the Python environment is activated
@@ -27,14 +27,15 @@ if [[ "$VIRTUAL_ENV" == "" ]]; then
         . $VENV_DIR/bin/activate
         echo "Activated virtual environment.."
         cd $REPO_DIR
-        if [ "$1" == "-h" ]; then
-            python ${CLI_EXE} --help
+        # if [ "$1" == "-h" ]; then
+        #     python ${CLI_EXE} --help
         
-        elif [ "$1" == "-g" ]; then
-            run_exe --graph
-        else
-            run_exe
-        fi
+        # elif [ "$1" == "-g" ]; then
+        #     run_exe --graph
+        # else
+        #     run_exe
+        # fi
+        run_exe "$@"
     else 
         echo "Virtual environment not found."
         exit 1

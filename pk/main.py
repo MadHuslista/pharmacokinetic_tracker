@@ -8,6 +8,7 @@ import numpy as np
 from cli import cli_message
 from config import START_TIME
 from graph import make_graph
+from time_tools import parse_input_time
 import pk
 
 
@@ -61,9 +62,15 @@ def main():
     ap.add_argument('--output-size', type=int, nargs=2, default=[1920, 1280], metavar=('W', 'H'),
                     help='the output width and height in pixels')
     ap.add_argument('--dpi', type=float, default=160, help='the output dots per inch (dpi)')
-    ap.add_argument('--graph', action='store_true', help='show the graph')
+    ap.add_argument('-g', '--graph', action='store_true', help='show the graph')
+
+    ap.add_argument('-p','--parsetime', type=str, help='parse a time string and exit. Accepted formats: YYYY-MM-DD HH:MM, YY-MM-DD HH:MM, MM-DD HH:MM, DD HH:MM, HH:MM')
+
     args = ap.parse_args()
 
+    if args.parsetime:
+        parse_input_time(args.parsetime)
+        return
 
     x_sec, x_time, drug_cp = run_estimation(
         half_life=args.hl,
@@ -81,6 +88,7 @@ def main():
 
     if args.graph:
         make_graph(x_time, drug_cp, args)
+        
 
 # -->> Execute <<----------------------
 
