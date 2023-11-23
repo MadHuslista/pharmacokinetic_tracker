@@ -35,6 +35,7 @@ def run_estimation(
 
     # TODO: Move to a dedicated module apart from pk.py
 
+    print("Calculating drug concentration over time...")
     drug = pk.Drug(half_life, time_to_max)
     num = round(estimation_duration / step + 1)
     x_hours = np.arange(num) * step
@@ -52,7 +53,7 @@ def main():
 
     args = arg_parser()
 
-    if args.parsetime:
+    if args.parsetime != None:
         parse_input_time(args.parsetime)
         return
 

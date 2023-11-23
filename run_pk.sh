@@ -16,7 +16,7 @@ DURATION="2000"
 EXE="python ${CLI_EXE} --hl ${HL} --tmax ${TMAX} --dose ${DOSE}  --offsets ${OFFSETS} --duration ${DURATION}"
 
 run_exe(){
-    echo "Running simulation.."
+    echo "Accessing Pk App.."
     # Run formatter  
     $EXE "$@"
 }
@@ -27,14 +27,6 @@ if [[ "$VIRTUAL_ENV" == "" ]]; then
         . $VENV_DIR/bin/activate
         echo "Activated virtual environment.."
         cd $REPO_DIR
-        # if [ "$1" == "-h" ]; then
-        #     python ${CLI_EXE} --help
-        
-        # elif [ "$1" == "-g" ]; then
-        #     run_exe --graph
-        # else
-        #     run_exe
-        # fi
         run_exe "$@"
     else 
         echo "Virtual environment not found."

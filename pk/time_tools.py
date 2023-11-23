@@ -6,7 +6,11 @@ import re
 import numpy as np
 from datetime import datetime
 
-from config import START_TIME
+from config import (
+    START_TIME,
+    PATTERNS,
+    PATTERNS_STR,
+)
 
 # -->> Tunables <<---------------------
 
@@ -29,18 +33,11 @@ def detect_input_time_format(
     input_time: str,
 ) -> str:
     
-    patterns = {
-        "%Y-%m-%d %H:%M": r"\d{4}-\d{2}-\d{2} \d{2}:\d{2}",  # Matches YYYY-MM-DD-HH:MM
-        "%y-%m-%d %H:%M": r"\d{2}-\d{2}-\d{2} \d{2}:\d{2}", # Matches YY-MM-DD HH:MM
-        "%m-%d-%H:%M": r"\d{2}-\d{2} \d{2}:\d{2}",          # Matches MM-DD-HH:MM
-        "%d %H:%M": r"\d{2} \d{2}:\d{2}",                   # Matches DD-HH:MM
-        "%H:%M": r"\d{2}:\d{2}",                              # Matches HH:MM
-    }
 
-    for time_format, pattern in patterns.items():
+    for time_format, pattern in PATTERNS.items():
         if re.match(pattern, input_time):
             # Print the detected time format
-            print(f"Detected time format: {time_format}")
+            print(f"\nDetected time format: {time_format}")
             return time_format
     
     # If no time format is detected, return None and print an error message
@@ -52,18 +49,21 @@ def edit_input_time(
 ) -> datetime:
     """Edit input time string."""
     while True: 
-        print(f"Input time: {input_time}")
+        print(f"\nInput time: {input_time}")
     
-        component_to_edit = input ("Edit any component? (y/m/d/H/M): ")
+        component_to_edit = input ("\tEdit any component? (y/m/d/H/M - [n]): ")
         components = ['y', 'm', 'd', 'H', 'M']    
 
         if component_to_edit in components:
             # Ask user for new value
-            new_value = input("New value: ")
+            new_value = input("\tNew value: ")
 
             # Update the input time
             if component_to_edit == "y":
-                input_time = input_time.replace(year=int(new_value))
+                if len(new_value) == 2:
+                    input_time = input_time.replace(year=int(f"20{new_value}"))
+                else:
+                    input_time = input_time.replace(year=int(new_value))
             elif component_to_edit == "m":
                 input_time = input_time.replace(month=int(new_value))
             elif component_to_edit == "d":
@@ -83,6 +83,13 @@ def parser(
 ) -> np.datetime64:
     
     current_datetime = datetime.now()
+
+    if not(input_time_str):
+        input_time_str = input(
+        f"""
+    \nAcceptable formats:
+        {PATTERNS_STR.replace("%%", "%")}
+    Input time: """)
 
     if type(input_time_str) == list:
         input_time_str = " ".join(input_time_str)
@@ -115,9 +122,12 @@ def parser(
     return np.datetime64(parsed_time)
 
 def parse_input_time(
-    input_time_str: str,
+        input_time_str: str,
 ) -> None:
     """Parse input time string and print delay."""
+
+    print("Parsing input time...")
+
     input_time = parser(input_time_str)
     delay = curr_time_to_delay(input_time)
     print(f"Delay: {delay:.2f} hours")

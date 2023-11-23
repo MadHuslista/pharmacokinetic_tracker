@@ -10,6 +10,7 @@ import texttable as tt
 from config import (
     START_TIME,
     EFFICACY_THRESHOLD,
+    PATTERNS_STR,
 )
 
 from time_tools import (
@@ -37,6 +38,8 @@ def print_table(
 
 def arg_parser() -> argparse.ArgumentParser:
     """Create argument parser."""
+
+    # Create argument parser
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     ap.add_argument('--hl', type=float, required=True, metavar='HOURS',
@@ -56,7 +59,7 @@ def arg_parser() -> argparse.ArgumentParser:
     ap.add_argument('--dpi', type=float, default=160, help='the output dots per inch (dpi)')
     ap.add_argument('-g', '--graph', action='store_true', help='show the graph')
 
-    ap.add_argument('-p','--parsetime', nargs='+', type=str, help='parse a time string and exit. Accepted formats: YYYY-MM-DD HH:MM, YY-MM-DD HH:MM, MM-DD HH:MM, DD HH:MM, HH:MM')
+    ap.add_argument('-p','--parsetime', nargs='*', type=str, help=f"parse a time string and exit. Accepted formats: {PATTERNS_STR}")
 
     return ap.parse_args()
 
