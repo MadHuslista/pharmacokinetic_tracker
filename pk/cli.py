@@ -157,8 +157,8 @@ def cli_message(
             f"Time:\n\t{next_dosage_time_day_label}\n\t{next_dosage_time_hour_label}",
         ],
         [
-            f"Delay:\n\t{last_dosage_delay}",
-            f"Delay:\n\t{last_dosage_max_delay}",
+            f"Delay:\n\t{last_dosage_delay:.2F}",
+            f"Delay:\n\t{last_dosage_max_delay:.2F}",
             f"Delay:\n\t{curr_delay:.2F}",
             f"Delay:\n\t{next_dosage_delay:.2F}",
         ],
