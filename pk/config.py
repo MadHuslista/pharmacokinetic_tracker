@@ -23,6 +23,8 @@ PATTERNS = {
 # Create a string with the PATTERNS dict keys
 PATTERNS_STR = ", \n\t".join([i.replace("%", "%%") for i in PATTERNS])
 
+OUTPUT_TIME_FORMAT = "%d %b %Y\n\t%a %H:%M"
+
 # -->> API <<--------------------------
 
 
