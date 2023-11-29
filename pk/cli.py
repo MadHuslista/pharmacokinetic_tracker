@@ -11,6 +11,8 @@ from config import (
     START_TIME,
     EFFICACY_THRESHOLD,
     PATTERNS_STR,
+    OUTPUT_TIME_FORMAT,
+    CSTM_TAB,
 )
 
 from time_tools import (
@@ -27,8 +29,9 @@ def print_table(
     data: list,
 ) -> None:
     """Print table."""
-    table = tt.Texttable()
+    table = tt.Texttable(max_width=80)
     table.add_rows(data, header=True)
+    table.set_cols_align("l" * len(data[0]))
     print("\nDosage Info:")
     message = table.draw()
     print(message)
@@ -70,15 +73,7 @@ def cli_message(
     x_time: np.array,
     drug_cp: np.array,
 ) -> None:
-    """Add CLI info in the following format.
-
-    | Last dosage time:       | Current time:            |
-    | - 2021-03-01 12:00:00   | - 2021-03-01 12:00:00    |
-    | Last dosage delay:      | Current delay:           |
-    | - 0                     | - 0                      |
-    | Time of next dosage:    | Current cp:              |
-    | - 2021-03-01 12:00:00   | - 0.5                    |
-    """
+    """Add CLI info message."""
     # Last dosage delay
     last_dosage_delay = offsets[-1]
 
@@ -86,11 +81,8 @@ def cli_message(
     last_dosage_time = START_TIME + np.timedelta64(int(last_dosage_delay * 3600), "s")
     last_dosage_time_day_label = datetime.strftime(
         last_dosage_time.astype(datetime),
-        "%d-%m-%y",
-    )
-    last_dosage_time_hour_label = datetime.strftime(
-        last_dosage_time.astype(datetime),
-        "%H:%M",
+        # "%d-%m-%y",
+        OUTPUT_TIME_FORMAT,
     )
 
     # Last dosage CP
@@ -99,8 +91,7 @@ def cli_message(
 
     # Current Time
     current_time = datetime.now()
-    current_time_day_label = datetime.strftime(current_time, "%d-%m-%y")
-    current_time_hour_label = datetime.strftime(current_time, "%H:%M")
+    current_time_day_label = datetime.strftime(current_time, OUTPUT_TIME_FORMAT)
 
     # Current delay
     current_time_np64 = np.datetime64(current_time)
@@ -118,12 +109,9 @@ def cli_message(
     last_dosage_max_time = x_time[last_dosage_max_idx]
     last_dosage_max_time_day_label = datetime.strftime(
         last_dosage_max_time.astype(datetime),
-        "%d-%m-%y",
+        OUTPUT_TIME_FORMAT,
     )
-    last_dosage_max_time_hour_label = datetime.strftime(
-        last_dosage_max_time.astype(datetime),
-        "%H:%M",
-    )
+
 
     #Max CP delay since last dosage
     last_dosage_max_delay = curr_time_to_delay(last_dosage_max_time)
@@ -137,37 +125,34 @@ def cli_message(
 
     next_dosage_time_day_label = datetime.strftime(
         next_dosage_time.astype(datetime),
-        "%d-%m-%y",
-    )
-    next_dosage_time_hour_label = datetime.strftime(
-        next_dosage_time.astype(datetime),
-        "%H:%M",
+        OUTPUT_TIME_FORMAT,
     )
 
     # Next dosage delay
     next_dosage_delay = curr_time_to_delay(next_dosage_time)
 
     # Print CLI message
+
     data = [
-        ["Last Dose", "Max Dose", "Current Dose", "Next Threshold cross"],
+        ["Last Dose", "Max Dose", "Current Dose", "Next Th. Cross"],
         [
-            f"Time:\n\t{last_dosage_time_day_label}\n\t{last_dosage_time_hour_label}",
-            f"Time:\n\t{last_dosage_max_time_day_label}\n\t{last_dosage_max_time_hour_label}",
-            f"Time:\n\t{current_time_day_label}\n\t{current_time_hour_label}",
-            f"Time:\n\t{next_dosage_time_day_label}\n\t{next_dosage_time_hour_label}",
+            f"Time:\n{CSTM_TAB}{last_dosage_time_day_label}",
+            f"Time:\n{CSTM_TAB}{last_dosage_max_time_day_label}",
+            f"Time:\n{CSTM_TAB}{current_time_day_label}",
+            f"Time:\n{CSTM_TAB}{next_dosage_time_day_label}",
         ],
         [
-            f"Delay:\n\t{last_dosage_delay:.2F}",
-            f"Delay:\n\t{last_dosage_max_delay:.2F}",
-            f"Delay:\n\t{curr_delay:.2F}",
-            f"Delay:\n\t{next_dosage_delay:.2F}",
+            f"Delay:\n{CSTM_TAB}{last_dosage_delay:.2F}",
+            f"Delay:\n{CSTM_TAB}{last_dosage_max_delay:.2F}",
+            f"Delay:\n{CSTM_TAB}{curr_delay:.2F}",
+            f"Delay:\n{CSTM_TAB}{next_dosage_delay:.2F}",
         ],
         [
-            f"CP:\n\t{last_dosage_cp:.2F}",
-            f"CP:\n\t{last_dosage_max_cp:.2F}",
-            f"CP:\n\t{current_cp:.2F}",
+            f"CP:\n{CSTM_TAB}{last_dosage_cp:.2F}",
+            f"CP:\n{CSTM_TAB}{last_dosage_max_cp:.2F}",
+            f"CP:\n{CSTM_TAB}{current_cp:.2F}",
             "",
-            # f"CP:\n\t{next_dosage_cp:.2F}",
+            # f"CP:\n{CSTM_TAB}{next_dosage_cp:.2F}",
         ],
     ]
 

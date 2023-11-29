@@ -10,6 +10,7 @@ from config import (
     START_TIME,
     PATTERNS,
     PATTERNS_STR,
+
 )
 
 # -->> Tunables <<---------------------
@@ -17,7 +18,6 @@ from config import (
 
 # -->> Definitions <<------------------
 
-FORMAT = "%Y-%m-%d %H:%M"
 
 # -->> API <<--------------------------
 
