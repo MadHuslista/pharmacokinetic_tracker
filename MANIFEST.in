@@ -1,6 +1,0 @@
-include .flaskenv
-include demo.svg
-include LICENSE
-include README.md
-include uwsgi.ini
-recursive-include pk_webapp/static *

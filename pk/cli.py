@@ -1,22 +1,48 @@
-"""Calculates and plots drug concentration over time."""
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 import argparse
+from datetime import datetime
 
-from datetime import datetime 
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 import numpy as np
+import texttable as tt
 
-import pk
+from config import (
+    START_TIME,
+    EFFICACY_THRESHOLD,
+    PATTERNS_STR,
+    OUTPUT_TIME_FORMAT,
+    CSTM_TAB,
+)
+
+from time_tools import (
+    curr_time_to_delay,
+)
+
+# -->> Tunables <<---------------------
 
 
-# Use Qt backend for matplotlib so that the window can be resized.
-import matplotlib
-matplotlib.use('QtAgg')
+# -->> Definitions <<------------------
 
 
-def main():
-    """The main function."""
+def print_table(
+    data: list,
+) -> None:
+    """Print table."""
+    table = tt.Texttable(max_width=80)
+    table.add_rows(data, header=True)
+    table.set_cols_align("l" * len(data[0]))
+    print("\nDosage Info:")
+    message = table.draw()
+    print(message)
+
+
+# -->> API <<--------------------------
+
+def arg_parser() -> argparse.ArgumentParser:
+    """Create argument parser."""
+
+    # Create argument parser
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     ap.add_argument('--hl', type=float, required=True, metavar='HOURS',
@@ -34,59 +60,106 @@ def main():
     ap.add_argument('--output-size', type=int, nargs=2, default=[1920, 1280], metavar=('W', 'H'),
                     help='the output width and height in pixels')
     ap.add_argument('--dpi', type=float, default=160, help='the output dots per inch (dpi)')
-    args = ap.parse_args()
+    ap.add_argument('-g', '--graph', action='store_true', help='show the graph')
 
-    step = 1/60
+    ap.add_argument('-p','--parsetime', nargs='*', type=str, help=f"parse a time string and exit. Accepted formats: {PATTERNS_STR}")
 
-    drug = pk.Drug(args.hl, args.tmax)
-    num = round(args.duration / step + 1)
-    x = np.arange(num) * step
-    y = drug.concentration(num, step, dict(zip(args.offsets, args.doses)))
+    return ap.parse_args()
 
-    plt.rcParams['font.size'] = 12
 
-    fig_width = args.output_size[0] / args.dpi
-    fig_height = args.output_size[1] / args.dpi
-    fig, ax = plt.subplots(figsize=(fig_width, fig_height), tight_layout=True)
 
-    # Addition of start time to x axis
-    start_time = np.datetime64('2023-09-13T13:50:00')
-    x_sec = x * 3600 
-    x_time = x_sec.astype('timedelta64[s]') + start_time
-    ax.plot(x_time, y)
+def cli_message(
+    offsets: list,
+    x_time: np.array,
+    drug_cp: np.array,
+) -> None:
+    """Add CLI info message."""
+    # Last dosage delay
+    last_dosage_delay = offsets[-1]
 
-    # Addition of x axis time format
-    x_formatter = mdates.DateFormatter('%H:%M %d-%m-%y')
-    ax.xaxis.set_major_formatter(x_formatter)
+    # Last dosage time
+    last_dosage_time = START_TIME + np.timedelta64(int(last_dosage_delay * 3600), "s")
+    last_dosage_time_day_label = datetime.strftime(
+        last_dosage_time.astype(datetime),
+        # "%d-%m-%y",
+        OUTPUT_TIME_FORMAT,
+    )
 
-    # x_daylocator = mdates.DayLocator(interval=1)
-    x_hourlocator = mdates.HourLocator(byhour=[0,12])
+    # Last dosage CP
+    last_dosage_idx = np.abs(x_time - last_dosage_time).argmin()
+    last_dosage_cp = drug_cp[last_dosage_idx]
 
-    ax.xaxis.set_major_locator(x_hourlocator)
-    # ax.xaxis.set_minor_locator(x_hourlocator)
-    ax.xaxis.set_tick_params(rotation=-90)
+    # Current Time
+    current_time = datetime.now()
+    current_time_day_label = datetime.strftime(current_time, OUTPUT_TIME_FORMAT)
 
-    # Addition of current time marker    
-    now = datetime.now()
-    current_time = np.datetime64(now)
-    current_time_label = datetime.strftime(now, '%H:%M %d-%m-%y')
-    ax.vlines(current_time, *ax.get_ylim(), color='red', linestyles='dashed', label=f'Current Time: \n{current_time_label}')
+    # Current delay
+    current_time_np64 = np.datetime64(current_time)
+    curr_delay = curr_time_to_delay(current_time_np64)
 
-    # Add effectiveness threshold 
-    threshold = 0.75
-    ax.hlines(threshold, *ax.get_xlim(), color='red', linestyles='dashed', label=f'Effectiveness Threshold: \n{threshold}')
+    # Current CP
+    current_cp_idx = np.abs(x_time - current_time_np64).argmin()
+    current_cp = drug_cp[current_cp_idx]
 
-    ax.set_xlabel('Hours', fontsize=18)
-    ax.set_ylabel('Concentration', fontsize=18)
-    ax.grid(linestyle='--')
-    ax.legend()
-    # hour_tick_steps = [1, 1.2, 1.6, 1.68, 2, 2.4, 3, 4, 4.8, 6, 8, 9.6, 10]
-    # ax.xaxis.set_major_locator(plt.MaxNLocator(nbins='auto', integer=True, steps=hour_tick_steps))
-    ax.margins(0.025, 0.05)
-    ax.autoscale()
-    fig.savefig(args.output, dpi=args.dpi)
-    fig.show()
-    input('Press enter to exit...')
+    # Max CP since last dosage
+    last_dosage_max_idx = drug_cp[last_dosage_idx:].argmax() + last_dosage_idx
+    last_dosage_max_cp = drug_cp[last_dosage_max_idx]
 
-if __name__ == '__main__':
-    main()
+    # Max CP time since last dosage
+    last_dosage_max_time = x_time[last_dosage_max_idx]
+    last_dosage_max_time_day_label = datetime.strftime(
+        last_dosage_max_time.astype(datetime),
+        OUTPUT_TIME_FORMAT,
+    )
+
+
+    #Max CP delay since last dosage
+    last_dosage_max_delay = curr_time_to_delay(last_dosage_max_time)
+
+    # Next dosage time
+    next_dosage_idx = (
+        np.abs(drug_cp[last_dosage_max_idx:] - EFFICACY_THRESHOLD).argmin() + last_dosage_max_idx
+    )
+
+    next_dosage_time = x_time[next_dosage_idx]
+
+    next_dosage_time_day_label = datetime.strftime(
+        next_dosage_time.astype(datetime),
+        OUTPUT_TIME_FORMAT,
+    )
+
+    # Next dosage delay
+    next_dosage_delay = curr_time_to_delay(next_dosage_time)
+
+    # Print CLI message
+
+    data = [
+        ["Last Dose", "Max Dose", "Current Dose", "Next Th. Cross"],
+        [
+            f"Time:\n{CSTM_TAB}{last_dosage_time_day_label}",
+            f"Time:\n{CSTM_TAB}{last_dosage_max_time_day_label}",
+            f"Time:\n{CSTM_TAB}{current_time_day_label}",
+            f"Time:\n{CSTM_TAB}{next_dosage_time_day_label}",
+        ],
+        [
+            f"Delay:\n{CSTM_TAB}{last_dosage_delay:.2F}",
+            f"Delay:\n{CSTM_TAB}{last_dosage_max_delay:.2F}",
+            f"Delay:\n{CSTM_TAB}{curr_delay:.2F}",
+            f"Delay:\n{CSTM_TAB}{next_dosage_delay:.2F}",
+        ],
+        [
+            f"CP:\n{CSTM_TAB}{last_dosage_cp:.2F}",
+            f"CP:\n{CSTM_TAB}{last_dosage_max_cp:.2F}",
+            f"CP:\n{CSTM_TAB}{current_cp:.2F}",
+            "",
+            # f"CP:\n{CSTM_TAB}{next_dosage_cp:.2F}",
+        ],
+    ]
+
+    print_table(data)
+
+
+# -->> Execute <<----------------------
+
+
+# -->> Export <<-----------------------
