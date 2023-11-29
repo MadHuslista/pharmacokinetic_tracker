@@ -9,6 +9,11 @@ from cli import (
     cli_message,
 )
 from config import START_TIME
+
+from db import (
+    open_record,
+)
+
 from graph import make_graph
 from time_tools import parse_input_time
 import pk
@@ -56,7 +61,11 @@ def main():
     if args.parsetime != None:
         parse_input_time(args.parsetime)
         return
-
+    
+    if args.record:
+        open_record()
+        return
+    
     x_sec, x_time, drug_cp = run_estimation(
         half_life=args.hl,
         time_to_max=args.tmax,

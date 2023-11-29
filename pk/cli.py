@@ -64,8 +64,8 @@ def arg_parser() -> argparse.ArgumentParser:
 
     ap.add_argument('-p','--parsetime', nargs='*', type=str, help=f"parse a time string and exit. Accepted formats: {PATTERNS_STR}")
 
+    ap.add_argument('-r', '--record', action='store_true', help='record a new dosage')
     return ap.parse_args()
-
 
 
 def cli_message(
