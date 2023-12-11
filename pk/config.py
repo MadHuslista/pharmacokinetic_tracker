@@ -18,6 +18,7 @@ DOSAGE_RECORD_PATH= REPO_DIR / "run_pk.sh"
 #Dosage Parameters
 START_TIME = np.datetime64("2023-09-13T13:50:00")
 EFFICACY_THRESHOLD = 0.75
+LAST_BOX=np.datetime64("2023-11-22T13:10:00")
 
 # String formatting
 CSTM_TAB = "       "

@@ -3,6 +3,13 @@
 
 # PRIORITY BECAUSE NEEDED
 
+# Notification
+- When peak is reached -> Remember the user to cultivate it: 
+  - Eat fruit sugar to fed the brain
+  - Do sports to increase the blood flow
+  - Wrap yourself in hoodie to avoid expending energy into temp regulation work
+  - BE AWARE OF ATTENTION FRAGILITY AND BE CAREFUL TO DO NOT DIVERT FROM CURRENT TASKS
+
 # Library
 - Create the independent libraries (branch feature/libraries): 
   - #	{ include = "pk_engine" },
