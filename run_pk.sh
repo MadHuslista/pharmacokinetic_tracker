@@ -13,7 +13,7 @@ OFFSETS="0 19 26 98 109 143 158 176 211 246.6 284 298.5 320.5 380 421.5 440.5 58
 DURATION="3000"
 
 
-EXE="python ${CLI_EXE} --hl ${HL} --tmax ${TMAX} --dose ${DOSE}  --offsets ${OFFSETS} --duration ${DURATION}"
+EXE="python3 ${CLI_EXE} --hl ${HL} --tmax ${TMAX} --dose ${DOSE}  --offsets ${OFFSETS} --duration ${DURATION}"
 
 run_exe(){
     echo "Accessing Pk App.."
