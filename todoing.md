@@ -3,6 +3,13 @@
 
 # PRIORITY BECAUSE NEEDED
 
+- Upate the `run_pk -p` behavior, when is fed without args 
+    -> should give current time. 
+    -> Options would be: 
+        - `run_pk -p` -> Inmediatly return the delay
+        - Ask if edit any input (i think this would be better)
+    - Make it so it would be easy to change option
+
 # Notification
 - When peak is reached -> Remember the user to cultivate it: 
   - Eat fruit sugar to fed the brain
