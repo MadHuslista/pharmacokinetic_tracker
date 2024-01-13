@@ -58,7 +58,7 @@ def main():
 
     args = arg_parser()
 
-    if args.parsetime != None:
+    if args.parsetime != None:  #--parsetime = -p
         parse_input_time(args.parsetime)
         return
     
