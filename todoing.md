@@ -3,12 +3,6 @@
 
 # PRIORITY BECAUSE NEEDED
 
-- Upate the `run_pk -p` behavior, when is fed without args 
-    -> should give current time. 
-    -> Options would be: 
-        - `run_pk -p` -> Inmediatly return the delay
-        - Ask if edit any input (i think this would be better)
-    - Make it so it would be easy to change option
 
 # Notification
 - When peak is reached -> Remember the user to cultivate it: 
@@ -29,6 +23,14 @@
   - Basic DB enabling? 
 
 # Solved
++ Upate the `run_pk -p` behavior, when is fed without args 
+    -> should give current time. 
+    -> Options would be: 
+        - `run_pk -p` -> Inmediatly return the delay
+        - Ask if edit any input (i think this would be better)
+    - Make it so it would be easy to change option
+
+
 + Add a second axis, so I have both, the time and the delay 
   + -> solved with mplcursor annotation
 + Add CLI info returned. 
