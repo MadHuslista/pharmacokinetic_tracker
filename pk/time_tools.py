@@ -84,12 +84,10 @@ def parser(
     
     current_datetime = datetime.now()
 
-    if not(input_time_str):
-        input_time_str = input(
-        f"""
-    \nAcceptable formats:
-        {PATTERNS_STR.replace("%%", "%")}
-    Input time: """)
+    if not(input_time_str): 
+        # If no input time is provided, use current time
+        input_time_str = current_datetime.strftime("%H:%M")
+
 
     if type(input_time_str) == list:
         input_time_str = " ".join(input_time_str)
