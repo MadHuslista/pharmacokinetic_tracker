@@ -13,7 +13,14 @@ import numpy as np
 
 # Paths
 REPO_DIR=Path(subprocess.check_output(["git", "rev-parse", "--show-toplevel"]).strip().decode("utf-8"))
+
+# TODO: Change name of this path
 DOSAGE_RECORD_PATH= REPO_DIR / "run_pk.sh"
+PK_LIB = REPO_DIR / "pk"
+DOSES_FILE = "doses.txt"
+DELAYS_FILE  = "delays.txt"
+DOSES_RECORD_PATH = PK_LIB / DOSES_FILE
+DELAYS_FILE_PATH = PK_LIB / DELAYS_FILE
 
 #Dosage Parameters
 START_TIME = np.datetime64("2023-09-13T13:50:00")
