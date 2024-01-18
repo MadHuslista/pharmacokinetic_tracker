@@ -11,7 +11,26 @@
   - Wrap yourself in hoodie to avoid expending energy into temp regulation work
   - BE AWARE OF ATTENTION FRAGILITY AND BE CAREFUL TO DO NOT DIVERT FROM CURRENT TASKS
 
+# CLI
+  - CLI: "New dosis"  => Add the new dosis and etc. 
+  - Simulation "New dosis" + current time
+      - Add an slider for the new dosis! 
+  - API: (h: hour / q: quantity) 
+      aft --now()
+      aft --clean_time() => In how much time the drug will be clean
+      aft --steady_state() => superimpose steady state from now
+      aft -a --add_new_dose --h 20.00 --q 1 
+      aft -s --sim_new_dose --h 19.00 --q 1
+      aft -d --display_doses 
+  - Add mean dosage => Search about it     
+  - Add a message option also. So, if a have a message I could write it in a separate log (not in a csv, but open a txt file. I feel it like open nano o vscode, and write normally; but the hour, day and etc its auto) 
+      - And also add a litle tick with a message notification in the graph 
+
+
+
+
 # Library
+- Convertir a Python 3 la call, eliminar la necesidad del shell script
 - Create the independent libraries (branch feature/libraries): 
   - #	{ include = "pk_engine" },
   - #	{ include = "pk_db" },
@@ -21,6 +40,9 @@
 
 # Then reevaluate with what to continue. 
   - Basic DB enabling? 
+  - Idea: Un log permanente en csv. 
+    - Convert to hours!! -> Timestamps
+
 
 # Solved
 + Upate the `run_pk -p` behavior, when is fed without args 
@@ -49,3 +71,27 @@
   | Time of next dosage:    | Current cp:              |
   | - 2021-03-01 12:00:00   | - 0.5                    |
   ``` 
+
+  + Updated to hour axis
+  + Add API, and autocompute the intervals of time. 
+  - Agregar periodos de sueño!
+  - How to check this shit from App? 
+
+
+# Refs
+  - Ocupar la idea del gist PERO aplicar la otra librería 
+  - Revisar otras referencias también
+  - Refs specific with LDX
+      - https://gist.github.com/icook/899fcc7187d2d0ae5f57
+      - https://github.com/crowsonkb/pharmacokinetics => demo funcional: https://kath.io/pk/
+  
+  - Refs of PK/PD: 
+      Google: python pharmacokinetics
+      - https://allendowney.github.io/ModSimPy/chap17.html
+      - https://demo.popypkpd.com/
+      - https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6363067/
+
+# OPTIONALS: 
+- Make a Pull Request
+    - https://medium.com/@topspinj/how-to-git-rebase-into-a-forked-repo-c9f05e821c8a
+
