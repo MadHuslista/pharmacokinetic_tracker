@@ -78,9 +78,9 @@ def make_graph(
 
     x_hourlocator = mdates.HourLocator(byhour=[0, 12])
     # x_daylocator = mdates.DayLocator(interval=1)
-    ax.xaxis.set_major_locator(x_hourlocator)
+    # ax.xaxis.set_major_locator(x_hourlocator)
     # ax.xaxis.set_minor_locator(x_hourlocator)
-    ax.xaxis.set_tick_params(rotation=-90)
+    ax.xaxis.set_tick_params(rotation=-45)
 
     # Add effectiveness threshold
     threshold = EFFICACY_THRESHOLD
