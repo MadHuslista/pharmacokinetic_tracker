@@ -1,13 +1,21 @@
 """Calculates and plots drug concentration over time."""
 
-import argparse
 import typing as tp
 
 import numpy as np
 
-from cli import cli_message
+from cli import (
+    arg_parser,
+    cli_message,
+)
 from config import START_TIME
+
+from db import (
+    open_record,
+)
+
 from graph import make_graph
+from time_tools import parse_input_time
 import pk
 
 
@@ -30,6 +38,9 @@ def run_estimation(
     """Wrapper to calculate drug concentration over time."""
     step = 1/60
 
+    # TODO: Move to a dedicated module apart from pk.py
+
+    print("Calculating drug concentration over time...")
     drug = pk.Drug(half_life, time_to_max)
     num = round(estimation_duration / step + 1)
     x_hours = np.arange(num) * step
@@ -44,27 +55,17 @@ def run_estimation(
 
 def main():
     """The main function."""
-    ap = argparse.ArgumentParser(description=__doc__,
-                                 formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    ap.add_argument('--hl', type=float, required=True, metavar='HOURS',
-                    help='the drug\'s elimination half-life, in hours')
-    ap.add_argument('--tmax', type=float, required=True, metavar='HOURS',
-                    help='the drug\'s time to maximum concentration, in hours')
-    ap.add_argument('--duration', type=float, default=24, metavar='HOURS',
-                    help='the duration, in hours, to simulate concentrations for')
-    ap.add_argument('--doses', type=float, nargs='+', default=[1], metavar='DOSE',
-                    help='the magnitudes of each dose (units are arbitrary)')
-    ap.add_argument('--offsets', type=float, nargs='+', default=[0], metavar='OFFSET',
-                    help='the time, in hours, that each dose is given at')
-    ap.add_argument('--output', default='output.png', metavar='FILE',
-                    help='the output image filename')
-    ap.add_argument('--output-size', type=int, nargs=2, default=[1920, 1280], metavar=('W', 'H'),
-                    help='the output width and height in pixels')
-    ap.add_argument('--dpi', type=float, default=160, help='the output dots per inch (dpi)')
-    ap.add_argument('--graph', action='store_true', help='show the graph')
-    args = ap.parse_args()
 
+    args = arg_parser()
 
+    if args.parsetime != None:  #--parsetime = -p
+        parse_input_time(args.parsetime)
+        return
+    
+    if args.record:
+        open_record()
+        return
+    
     x_sec, x_time, drug_cp = run_estimation(
         half_life=args.hl,
         time_to_max=args.tmax,
@@ -81,6 +82,7 @@ def main():
 
     if args.graph:
         make_graph(x_time, drug_cp, args)
+        
 
 # -->> Execute <<----------------------
 
